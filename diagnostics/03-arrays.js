@@ -1,6 +1,7 @@
-const nums = [-5, -2, -9];
-
 function findMax (arr) {
+    if (arr.length === 0) {
+        return undefined;
+    }
     let max = arr[0];
     for (const n of arr) {
         if (n > max) {
@@ -20,5 +21,10 @@ function countEven (arr) {
     return totalEvens;
 }
 
-console.log(findMax(nums));
-console.log(countEven(nums));
+console.log(findMax([3, 17, -4, 8, 0, 11]));
+console.log(countEven([3, 17, -4, 8, 0, 11]));
+
+console.log(findMax([-5, -2, -9]));
+console.log(countEven([-5, -2, -9]));
+
+console.log(findMax([]));
