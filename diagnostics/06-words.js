@@ -15,3 +15,5 @@ function wordCount(text) {
 }
 
 console.log(wordCount("Кот и пёс и кот"));
+console.log(wordCount("Убивать убивать убивать убивать!"));
+console.log(wordCount("1 2 3 2 4 3 4 3 4 4"));
