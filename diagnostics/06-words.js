@@ -4,7 +4,7 @@ function wordCount(text) {
         .toLowerCase()
         .split(" ")
         .filter((word) => word !== "");
-    for (word of words) {
+    for (const word of words) {
         if (word in counts) {
             counts[word]++;
         } else {
