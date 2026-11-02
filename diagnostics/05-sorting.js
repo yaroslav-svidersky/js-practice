@@ -10,7 +10,7 @@ function getAdultNames(users) {
     const adultUsers = [];
     for (const user of users) {
         if (user.age >= 18) {
-        adultUsers.push(user);
+            adultUsers.push(user);
         }
     }
     adultUsers.sort((a, b) => a.age - b.age);
