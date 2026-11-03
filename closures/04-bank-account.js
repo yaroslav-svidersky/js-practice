@@ -1,10 +1,8 @@
 function createBankAccount(initialBalance) {
-  let money = 0;
-  if (Number.isFinite(initialBalance) && initialBalance >= 0) {
-    money = initialBalance;
-  } else {
+  if (!Number.isFinite(initialBalance) || initialBalance < 0) {
     throw new Error("Начальный баланс должен быть неотрицательным числом");
   }
+  let money = initialBalance;
 
   return {
     deposit(amount) {
