@@ -37,5 +37,15 @@ console.log(account.withdraw(500)); // false
 console.log(account.getBalance()); // 120
 console.log(account.withdraw(-20)); // false
 console.log(account.withdraw(account.getBalance())); // true
-console.log(account.deposit("10")); // Error
-console.log(account.deposit(-50)); // Error
+
+try {
+  account.deposit("10");
+} catch (error) {
+  console.log(error.message); // "Депозит должен быть неотрицательным числом"
+}
+
+try {
+  account.deposit(-50);
+} catch (error) {
+  console.log(error.message); // "Депозит должен быть неотрицательным числом"
+}
