@@ -16,11 +16,14 @@ function createBankAccount(initialBalance) {
     },
 
     withdraw(amount) {
-      if (amount > 0 && amount <= money) {
+      if (!Number.isFinite(amount) || amount < 0) {
+        throw new Error("Для изъятия должно быть неотрицательное число");
+      } else if (amount <= money) {
         money = money - amount;
         return true;
+      } else {
+        return false;
       }
-      return false;
     },
 
     getBalance() {
@@ -35,7 +38,6 @@ console.log(account.getBalance()); // 150
 console.log(account.withdraw(30)); // true
 console.log(account.withdraw(500)); // false
 console.log(account.getBalance()); // 120
-console.log(account.withdraw(-20)); // false
 console.log(account.withdraw(account.getBalance())); // true
 
 try {
@@ -48,4 +50,16 @@ try {
   account.deposit(-50);
 } catch (error) {
   console.log(error.message); // "Депозит должен быть неотрицательным числом"
+}
+
+try {
+  account.withdraw("10");
+} catch (error) {
+  console.log(error.message); // "Для изъятия должно быть неотрицательное число"
+}
+
+try {
+  account.withdraw(-20);
+} catch (error) {
+  console.log(error.message); // "Для изъятия должно быть неотрицательное число"
 }
