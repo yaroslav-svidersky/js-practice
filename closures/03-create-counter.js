@@ -20,3 +20,7 @@ counter.increment();
 counter.increment();
 counter.decrement();
 console.log(counter.getValue()); // 1
+
+counter.count = 100;
+console.log(counter.getValue()); // 1
+console.log(counter.count); // 100
