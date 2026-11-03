@@ -6,7 +6,7 @@ function createBankAccount(initialBalance) {
 
   return {
     deposit(amount) {
-      if (Number.isFinite(amount) && amount >= 0) {
+      if (Number.isFinite(amount) && amount > 0) {
         money = money + amount;
       } else {
         throw new Error("Депозит должен быть неотрицательным числом");
