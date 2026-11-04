@@ -18,5 +18,5 @@ console.log(
 console.log(
   orders
     .filter((order) => order.status === "pending")
-    .map((order, index) => (order[index] = order.customer)),
+    .map((order) => order.customer),
 ); // ['Пётр', 'Иван']
