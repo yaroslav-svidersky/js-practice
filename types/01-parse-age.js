@@ -1,5 +1,6 @@
 function parseAge(age) {
   const maxAge = 150;
+  const ageNumber = Number(age);
   if (typeof age !== "string") {
     return null;
   }
@@ -7,13 +8,13 @@ function parseAge(age) {
   if (age === "") {
     return null;
   }
-  if (!Number.isInteger(Number(age))) {
+  if (!Number.isInteger(ageNumber)) {
     return null;
   }
-  if (Number(age) < 0 || Number(age) > maxAge) {
+  if (ageNumber < 0 || ageNumber > maxAge) {
     return null;
   }
-  return Number(age);
+  return ageNumber;
 }
 
 console.log(parseAge("42")); // 42
