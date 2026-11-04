@@ -6,7 +6,7 @@ function parseAge(age) {
   if (Number(age) === 0 || !Number.isInteger(Number(age))) {
     return null;
   }
-  if (Number(age) < 0 || Number(age) > maxAge) {
+  if (Number(age) < 0 || Number(age) >= maxAge) {
     return null;
   }
   return Number(age);
