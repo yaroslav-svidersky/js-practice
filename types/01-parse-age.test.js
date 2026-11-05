@@ -22,7 +22,7 @@ test("returns null for an empty string", () => {
   assert.equal(parseAge(""), null);
 });
 
-test("returns null for an empty string with a string with only spaces", () => {
+test("returns null for a string with only spaces", () => {
   assert.equal(parseAge("   "), null);
 });
 
