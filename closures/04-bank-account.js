@@ -40,7 +40,7 @@ console.log(account.getBalance()); // 120
 console.log(account.withdraw(account.getBalance())); // true
 
 try {
-  const account1 = createBankAccount(-100);
+  createBankAccount(-100);
 } catch (error) {
   console.log(error.message); // "Начальный баланс должен быть положительным числом"
 }
