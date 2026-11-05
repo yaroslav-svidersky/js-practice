@@ -30,47 +30,4 @@ function createBankAccount(initialBalance) {
   };
 }
 
-const account = createBankAccount(100);
-account.deposit(50);
-console.log(account.getBalance()); // 150
-console.log(account.withdraw(30)); // true
-console.log(account.withdraw(500)); // false
-console.log(account.withdraw(0)); // false
-console.log(account.getBalance()); // 120
-console.log(account.withdraw(account.getBalance())); // true
-
-try {
-  createBankAccount(-100);
-} catch (error) {
-  console.log(error.message); // "Начальный баланс должен быть положительным числом"
-}
-
-try {
-  account.deposit(0);
-} catch (error) {
-  console.log(error.message); // "Депозит должен быть положительным числом больше нуля"
-}
-
-try {
-  account.deposit("10");
-} catch (error) {
-  console.log(error.message); // "Депозит должен быть положительным числом больше нуля"
-}
-
-try {
-  account.deposit(-50);
-} catch (error) {
-  console.log(error.message); // "Депозит должен быть положительным числом больше нуля"
-}
-
-try {
-  account.withdraw("10");
-} catch (error) {
-  console.log(error.message); // "Для изъятия должно быть положительное число"
-}
-
-try {
-  account.withdraw(-20);
-} catch (error) {
-  console.log(error.message); // "Для изъятия должно быть положительное число"
-}
+module.exports = { createBankAccount };
