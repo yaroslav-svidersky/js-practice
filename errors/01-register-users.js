@@ -31,33 +31,27 @@ function createUser(data) {
     throw new TypeError("name не строка");
   }
   name = name.trim();
-  if (data.name.trim() === "") {
+  if (name === "") {
     throw new RangeError("name после trim() пустой");
   }
   age = parseAge(age);
   if (age === null) {
     throw new RangeError("age не число");
   }
-  return { name: name, age: age };
+  return { name, age };
 }
 
 function registerUsers(list) {
   const created = [];
   const errors = [];
-  let count = 1;
-  for (const data of list) {
+  list.forEach((data, index) => {
     try {
       created.push(createUser(data));
     } catch (error) {
-      errors.push(`Заявка ${count}: ${error.name}: ${error.message}`);
-    } finally {
-      count++;
+      errors.push(`Заявка ${index + 1}: ${error.name}: ${error.message}`);
     }
-  }
-  return {
-    created: created,
-    errors: errors,
-  };
+  });
+  return { created, errors };
 }
 
 console.log(createUser(applications[0]));
