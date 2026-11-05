@@ -28,11 +28,7 @@ function toPublicUser(user) {
 }
 
 function getPublicUsers(users) {
-  const publicUsers = [];
-  for (const user of users) {
-    const { email, password, ...publicUser } = user;
-    publicUsers.push(publicUser);
-  }
+  const publicUsers = users.map(toPublicUser);
   return publicUsers;
 }
 
@@ -40,6 +36,7 @@ function greetUser({ name, role }) {
   return `Привет, ${name} (${role})!`;
 }
 
-console.log(toPublicUser(users[0]));
-console.log(getPublicUsers(users));
-console.log(greetUser(users[2]));
+console.log(toPublicUser(users[0])); // { id: 1, name: 'Анна', role: 'admin' }
+console.log(getPublicUsers(users)); // [ { id: 1, name: ..., role: ... }, { id: 2, name: ..., role: ... }, { id: 3, name: ..., role: ... } ]
+console.log(greetUser(users[2])); // Привет, Мария (user)!
+console.log(users); // users без изменений
