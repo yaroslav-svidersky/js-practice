@@ -9,13 +9,12 @@ const orders = [
 
 function getTopOrders(orders, n) {
   const copyOrders = [...orders];
-  return copyOrders.sort((a, b) => b.total - a.total).slice(0, n);
+  return copyOrders.sort(({ total: a }, { total: b }) => b - a).slice(0, n);
 }
 
 function markDelivered(orders, id) {
-  const copyOrders = [...orders];
-  return copyOrders.map((order) =>
-    order.id === id ? { ...order, status: "delivered" } : order,
+  return orders.map((order) =>
+    order.id === id ? { ...order, status: "delivered" } : { ...order },
   );
 }
 
