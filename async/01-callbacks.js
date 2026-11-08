@@ -4,14 +4,6 @@ const files = {
   "c.txt": "Hello from C",
 };
 
-function callback(error, content) {
-  if (error === null) {
-    console.log(content);
-    return undefined;
-  }
-  console.log(error.message);
-}
-
 function fakeReadFile(name, callback) {
   if (files[name] !== undefined) {
     setTimeout(() => callback(null, files[name]), 100);
