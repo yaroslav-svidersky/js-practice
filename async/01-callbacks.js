@@ -1,6 +1,7 @@
 const files = {
   "a.txt": "Hello from A",
   "b.txt": "Hello from B",
+  "c.txt": "Hello from C",
 };
 
 function callback(error, content) {
@@ -19,9 +20,26 @@ function fakeReadFile(name, callback) {
   }
 }
 
-fakeReadFile("a.txt", callback);
-fakeReadFile("missing.txt", callback);
+fakeReadFile("a.txt", (err, a) => {
+  if (err) {
+    console.log(err.message);
+    return;
+  }
+  fakeReadFile("b.txt", (err, b) => {
+    if (err) {
+      console.log(err.message);
+      return;
+    }
+    fakeReadFile("c.txt", (err, c) => {
+      if (err) {
+        console.log(err.message);
+        return;
+      }
+      console.log(`${a} | ${b} | ${c}`);
+    });
+  });
+});
+
 console.log("end");
 // end
-// Hello from A
-// File not found: missing.txt
+// Hello from A | Hello from B | Hello from C
