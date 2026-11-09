@@ -15,15 +15,33 @@ function readFilePromise(name) {
 }
 
 async function readAll(first, second, third) {
+  const start = Date.now();
   try {
     const a = await readFilePromise(first);
     const b = await readFilePromise(second);
     const c = await readFilePromise(third);
-    console.log(`${a} | ${b} | ${c}`);
+    console.log(`sequential (${Date.now() - start}): ${a} | ${b} | ${c}`);
   } catch (err) {
-    console.log(err.message);
+    console.log(`sequential (${Date.now() - start}): ` + err.message);
   }
 }
 
-readAll("a.txt", "b.txt", "c.txt");
-readAll("a.txt", "missing.txt", "c.txt");
+async function readAllParallel(first, second, third) {
+  const start = Date.now();
+  try {
+    const [a, b, c] = await Promise.all([
+      readFilePromise(first),
+      readFilePromise(second),
+      readFilePromise(third),
+    ]);
+    console.log(`parallel (${Date.now() - start}): ${a} | ${b} | ${c}`);
+  } catch (err) {
+    console.log(`parallel (${Date.now() - start}): ` + err.message);
+  }
+}
+
+readAll("a.txt", "b.txt", "c.txt"); // ~300 ms
+readAll("a.txt", "missing.txt", "c.txt"); // ~200 ms
+
+readAllParallel("a.txt", "b.txt", "c.txt"); // ~100 ms
+readAllParallel("a.txt", "missing.txt", "c.txt"); // ~100 ms
