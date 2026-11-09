@@ -13,8 +13,34 @@ function readFilePromise(name) {
     }
   });
 }
+const abc = [];
+readFilePromise("a.txt")
+  .then((a) => {
+    abc.push(a);
+    return readFilePromise("b.txt");
+  })
+  .then((b) => {
+    abc.push(b);
+    return readFilePromise("c.txt");
+  })
+  .then((c) => {
+    abc.push(c);
+    console.log(`${abc[0]} | ${abc[1]} | ${abc[2]}`);
+  })
+  .catch((err) => console.log(err.message));
 
-const p1 = readFilePromise("a.txt");
-const p2 = readFilePromise("missing.txt");
-p1.then((value) => console.log(value)).catch((err) => console.log(err.message));
-p2.then((value) => console.log(value)).catch((err) => console.log(err.message));
+const abc2 = [];
+readFilePromise("a.txt")
+  .then((a) => {
+    abc2.push(a);
+    return readFilePromise("missing.txt");
+  })
+  .then((b) => {
+    abc2.push(b);
+    return readFilePromise("c.txt");
+  })
+  .then((c) => {
+    abc2.push(c);
+    console.log(`${abc2[0]} | ${abc2[1]} | ${abc2[2]}`);
+  })
+  .catch((err) => console.log(err.message));
