@@ -9,14 +9,14 @@ async function readAll(first, second, third) {
       path.join(__dirname, "data", third),
     ];
     const [textA, textB, textC] = await Promise.all([
-      await fs.readFile(filePathA, "utf8"),
-      await fs.readFile(filePathB, "utf8"),
-      await fs.readFile(filePathC, "utf8"),
+      fs.readFile(filePathA, "utf8"),
+      fs.readFile(filePathB, "utf8"),
+      fs.readFile(filePathC, "utf8"),
     ]);
     console.log(`${textA}, ${textB} - ${textC}!`);
   } catch (err) {
     if (err.code === "ENOENT") {
-      console.log(`File not found: ${err.path}`);
+      console.log(`File not found: ${path.basename(err.path)}`);
     } else {
       console.log(err.message);
     }
