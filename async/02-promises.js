@@ -9,10 +9,12 @@ function readFilePromise(name) {
     if (files[name] !== undefined) {
       setTimeout(() => resolve(files[name]), 100);
     } else {
-      reject(new Error("File not found: " + name));
+      setTimeout(() => reject(new Error("File not found: " + name)), 100);
     }
   });
 }
 
-const p = readFilePromise("a.txt");
-p.then((value) => console.log(value)).catch((err) => console.log(err.message));
+const p1 = readFilePromise("a.txt");
+const p2 = readFilePromise("missing.txt");
+p1.then((value) => console.log(value)).catch((err) => console.log(err.message));
+p2.then((value) => console.log(value)).catch((err) => console.log(err.message));
