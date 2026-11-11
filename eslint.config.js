@@ -12,4 +12,10 @@ module.exports = [
       "no-unused-vars": ["error", { ignoreRestSiblings: true }],
     },
   },
+  {
+    files: ["**/*.mjs"],
+    languageOptions: {
+      sourceType: "module",
+    },
+  },
 ];
