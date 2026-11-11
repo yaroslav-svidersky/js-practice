@@ -84,17 +84,27 @@ describe("formatTasks", () => {
   test("formats a done task", () => {
     assert.equal(
       formatTasks([{ id: 2, title: "Take out the trash", done: true }]),
-      "[X] 1. Take out the trash",
+      "[x] 2. Take out the trash",
+    );
+  });
+
+  test("uses task id, not position", () => {
+    assert.equal(
+      formatTasks([
+        { id: 5, title: "Take out the trash", done: true },
+        { id: 2, title: "Buy salt", done: false },
+      ]),
+      `[ ] 2. Buy salt\n[x] 5. Take out the trash`,
     );
   });
 
   test("joins tasks with newlines", () => {
     assert.equal(
       formatTasks([
-        { id: 1, title: "Buy salt", done: false },
-        { id: 2, title: "Take out the trash", done: true },
+        { id: 2, title: "Buy salt", done: false },
+        { id: 5, title: "Take out the trash", done: true },
       ]),
-      "[ ] 1. Buy salt\n[X] 2. Take out the trash",
+      "[ ] 2. Buy salt\n[x] 5. Take out the trash",
     );
   });
 

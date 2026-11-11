@@ -18,16 +18,15 @@ function completeTask(tasks, id) {
 }
 
 function formatTasks(tasks) {
-  if (tasks.length > 0) {
-    const listTitles = tasks
-      .map(
-        (task, index) =>
-          `${tasks[index].done === false ? "[ ]" : "[X]"} ${index + 1}. ${task.title}`,
-      )
-      .join("\n");
-    return listTitles;
+  if (tasks.length === 0) {
+    return "No tasks";
   }
-  return "No tasks";
+  const listTitles = tasks
+    .map((task) => [task.done, task.id, task.title])
+    .sort((a, b) => a[1] - b[1])
+    .map((task) => `${task[0] ? "[x]" : "[ ]"} ${task[1]}. ${task[2]}`)
+    .join("\n");
+  return listTitles;
 }
 
 module.exports = { addTask, completeTask, formatTasks };
