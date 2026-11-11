@@ -11,6 +11,10 @@ describe("addTask", () => {
     assert.equal(addTask([{ id: 1 }, { id: 5 }], "Buy eggs")[2].id, 6);
   });
 
+  test("uses max id + 1 when ids are not sorted", () => {
+    assert.equal(addTask([{ id: 5 }, { id: 1 }], "Buy eggs")[2].id, 6);
+  });
+
   test("does not mutate the original array", () => {
     const tasks = [{}, {}];
     addTask(tasks, "Buy bread");
