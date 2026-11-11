@@ -22,9 +22,7 @@ function formatTasks(tasks) {
     return "No tasks";
   }
   const listTitles = tasks
-    .map((task) => [task.done, task.id, task.title])
-    .sort((a, b) => a[1] - b[1])
-    .map((task) => `${task[0] ? "[x]" : "[ ]"} ${task[1]}. ${task[2]}`)
+    .map((task) => `${task.done ? "[x]" : "[ ]"} ${task.id}. ${task.title}`)
     .join("\n");
   return listTitles;
 }

@@ -94,7 +94,7 @@ describe("formatTasks", () => {
         { id: 5, title: "Take out the trash", done: true },
         { id: 2, title: "Buy salt", done: false },
       ]),
-      `[ ] 2. Buy salt\n[x] 5. Take out the trash`,
+      `[x] 5. Take out the trash\n[ ] 2. Buy salt`,
     );
   });
 
