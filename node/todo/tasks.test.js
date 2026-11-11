@@ -1,6 +1,6 @@
 const { describe, test } = require("node:test");
 const assert = require("node:assert/strict");
-const { addTask, completeTask } = require("./tasks.js");
+const { addTask, completeTask, formatTasks } = require("./tasks.js");
 
 describe("addTask", () => {
   test("adds a task to an empty list", () => {
@@ -70,5 +70,35 @@ describe("completeTask", () => {
   test("throws RangeError for an unknown id", () => {
     const tasks = [{ id: 3, title: "Buy bread", done: false }];
     assert.throws(() => completeTask(tasks, 5), RangeError);
+  });
+});
+
+describe("formatTasks", () => {
+  test("formats an undone task", () => {
+    assert.equal(
+      formatTasks([{ id: 1, title: "Buy salt", done: false }]),
+      "[ ] 1. Buy salt",
+    );
+  });
+
+  test("formats a done task", () => {
+    assert.equal(
+      formatTasks([{ id: 2, title: "Take out the trash", done: true }]),
+      "[X] 1. Take out the trash",
+    );
+  });
+
+  test("joins tasks with newlines", () => {
+    assert.equal(
+      formatTasks([
+        { id: 1, title: "Buy salt", done: false },
+        { id: 2, title: "Take out the trash", done: true },
+      ]),
+      "[ ] 1. Buy salt\n[X] 2. Take out the trash",
+    );
+  });
+
+  test('returns "No tasks" for an empty list', () => {
+    assert.equal(formatTasks([]), "No tasks");
   });
 });

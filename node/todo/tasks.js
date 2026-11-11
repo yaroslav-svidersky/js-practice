@@ -1,9 +1,9 @@
 function addTask(tasks, title) {
-  const highestID =
-    tasks.length === 0 ? 0 : Math.max(...tasks.map((elem) => elem.id));
   if (typeof title !== "string" || title.trim() === "") {
     throw new TypeError("Title must be a non-empty string");
   }
+  const highestID =
+    tasks.length === 0 ? 0 : Math.max(...tasks.map((elem) => elem.id));
   return [...tasks, { id: highestID + 1, title: title.trim(), done: false }];
 }
 
@@ -17,4 +17,17 @@ function completeTask(tasks, id) {
   return newList;
 }
 
-module.exports = { addTask, completeTask };
+function formatTasks(tasks) {
+  if (tasks.length > 0) {
+    const listTitles = tasks
+      .map(
+        (task, index) =>
+          `${tasks[index].done === false ? "[ ]" : "[X]"} ${index + 1}. ${task.title}`,
+      )
+      .join("\n");
+    return listTitles;
+  }
+  return "No tasks";
+}
+
+module.exports = { addTask, completeTask, formatTasks };
