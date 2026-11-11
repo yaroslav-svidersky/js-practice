@@ -1,6 +1,6 @@
 const { describe, test } = require("node:test");
 const assert = require("node:assert/strict");
-const { addTask } = require("./tasks.js");
+const { addTask, completeTask } = require("./tasks.js");
 
 describe("addTask", () => {
   test("adds a task to an empty list", () => {
@@ -32,5 +32,43 @@ describe("addTask", () => {
 
   test("throws TypeError for a non-string title", () => {
     assert.throws(() => addTask([], 42), TypeError);
+  });
+});
+
+describe("completeTask", () => {
+  test("marks the task as done", () => {
+    const markedTasks = completeTask(
+      [
+        { id: 5, title: "Buy bread", done: false },
+        { id: 4, title: "Buy eggs", done: false },
+      ],
+      5,
+    );
+    assert.equal(markedTasks[0].done, true);
+  });
+
+  test("does not change other tasks", () => {
+    const markedTasks = completeTask(
+      [
+        { id: 5, title: "Buy bread", done: false },
+        { id: 4, title: "Buy eggs", done: false },
+      ],
+      5,
+    );
+    assert.equal(markedTasks[1].done, false);
+  });
+
+  test("does not mutate the original task", () => {
+    const originalTasks = [
+      { id: 5, title: "Buy bread", done: false },
+      { id: 4, title: "Buy eggs", done: false },
+    ];
+    completeTask(originalTasks, 5);
+    assert.equal(originalTasks[0].done, false);
+  });
+
+  test("throws RangeError for an unknown id", () => {
+    const tasks = [{ id: 3, title: "Buy bread", done: false }];
+    assert.throws(() => completeTask(tasks, 5), RangeError);
   });
 });

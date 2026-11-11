@@ -7,4 +7,18 @@ function addTask(tasks, title) {
   throw new TypeError("Title must be a non-empty string");
 }
 
-module.exports = { addTask };
+function completeTask(tasks, id) {
+  const completeTaskIndex = tasks.findIndex((task) => task.id === id);
+  if (completeTaskIndex !== -1) {
+    const newList = [...tasks];
+    newList[completeTaskIndex] = {
+      id: id,
+      title: tasks[completeTaskIndex].title,
+      done: true,
+    };
+    return newList;
+  }
+  throw new RangeError(`Task ${id} not found`);
+}
+
+module.exports = { addTask, completeTask };
