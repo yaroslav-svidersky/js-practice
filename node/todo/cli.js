@@ -26,11 +26,9 @@ async function main() {
       console.log(`Completed task ${id}`);
     } else {
       if (command !== undefined) {
-        console.error(`Unknown command: ${command}`);
-        process.exitCode = 1;
+        throw new Error(`Unknown command: ${command}`);
       } else {
-        console.error("Command argument missing");
-        process.exitCode = 1;
+        throw new Error("Command argument missing");
       }
     }
   } catch (err) {
