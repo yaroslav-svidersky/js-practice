@@ -23,14 +23,4 @@ async function saveTasks(filePath, tasks) {
   await fs.writeFile(filePath, JSON.stringify(tasks, null, 2));
 }
 
-// console.log(
-//   saveTasks("/home/yara/projects/js-practice/node/todo/output/tasks.json", [
-//     { id: 5, title: "Buy bread", done: false },
-//   ]),
-// );
-
-// loadTasks("/home/yara/projects/js-practice/node/todo/output/tasks.json").then(
-//   (a) => console.log(a),
-// );
-
 module.exports = { loadTasks, saveTasks };

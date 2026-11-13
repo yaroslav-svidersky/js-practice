@@ -31,10 +31,12 @@ describe("loadTasks&saveTasks", () => {
   });
 
   test("rejects with TypeError when the file is not an array", async () => {
-    const task = { id: 1, title: "Do some exercises", done: false };
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "todo-"));
     const filePath = path.join(dir, "tasks.json");
-    await saveTasks(filePath, task);
-    await assert.rejects(() => loadTasks(filePath), TypeError);
+    await fs.writeFile(filePath, '{"a":1}');
+    await assert.rejects(() => loadTasks(filePath), {
+      name: "TypeError",
+      message: `Invalid tasks file: ${filePath}`,
+    });
   });
 });
