@@ -30,3 +30,13 @@ function completeTask(tasks: Task[], id: number): Task[] {
 
 const newTasks = completeTask([a, b, c, d], 3);
 console.log(newTasks);
+
+function getTitle(tasks: Task[], id: number): string {
+  const task = tasks.find((task) => task.id === id);
+  if (task === undefined) {
+    throw new RangeError(`Task ${id} not found`);
+  }
+  return task.title;
+}
+
+console.log(getTitle([a, b], 2));
