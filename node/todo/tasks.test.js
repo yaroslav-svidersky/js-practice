@@ -53,6 +53,7 @@ describe("removeTask", () => {
 
   test("does not mutate the original array", () => {
     const tasks = [{ id: 1 }, { id: 3 }, { id: 2 }];
+    removeTask(tasks, 3);
     assert.deepEqual(tasks, [{ id: 1 }, { id: 3 }, { id: 2 }]);
   });
 
