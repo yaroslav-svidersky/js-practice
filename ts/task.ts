@@ -17,3 +17,16 @@ function titles(tasks: Task[]) {
 }
 
 const result: string[] = titles([a, b, c, d]);
+
+function completeTask(tasks: Task[], id: number): Task[] {
+  const completeTaskIndex = tasks.findIndex((task) => task.id === id);
+  if (completeTaskIndex === -1) {
+    throw new RangeError(`Task ${id} not found`);
+  }
+  const newList = [...tasks];
+  newList[completeTaskIndex] = { ...tasks[completeTaskIndex], done: true };
+  return newList;
+}
+
+const newTasks = completeTask([a, b, c, d], 3);
+console.log(newTasks);
