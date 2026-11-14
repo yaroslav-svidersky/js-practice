@@ -1,9 +1,22 @@
-const { addTask, completeTask, formatTasks } = require("./tasks.js");
+const {
+  addTask,
+  removeTask,
+  completeTask,
+  formatTasks,
+} = require("./tasks.js");
 const { loadTasks, saveTasks } = require("./storage.js");
 const path = require("node:path");
 
 const filePath =
   process.env.TODO_FILE ?? path.join(__dirname, "output", "tasks.json");
+
+function parseId(arg) {
+  const id = Number(arg);
+  if (!Number.isInteger(id)) {
+    throw new TypeError(`Invalid id: ${arg}`);
+  }
+  return id;
+}
 
 async function main() {
   try {
@@ -16,11 +29,13 @@ async function main() {
       const tasks = addTask(await loadTasks(filePath), title);
       await saveTasks(filePath, tasks);
       console.log(`Added task ${tasks.at(-1).id}`);
+    } else if (command === "remove") {
+      const id = parseId(args[0]);
+      const tasks = removeTask(await loadTasks(filePath), id);
+      await saveTasks(filePath, tasks);
+      console.log(`Removed task ${id}`);
     } else if (command === "done") {
-      const id = Number(args[0]);
-      if (!Number.isInteger(id)) {
-        throw new TypeError(`Invalid id: ${args[0]}`);
-      }
+      const id = parseId(args[0]);
       const tasks = completeTask(await loadTasks(filePath), id);
       await saveTasks(filePath, tasks);
       console.log(`Completed task ${id}`);

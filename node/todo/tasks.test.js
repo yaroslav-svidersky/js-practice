@@ -1,6 +1,11 @@
 const { describe, test } = require("node:test");
 const assert = require("node:assert/strict");
-const { addTask, completeTask, formatTasks } = require("./tasks.js");
+const {
+  addTask,
+  removeTask,
+  completeTask,
+  formatTasks,
+} = require("./tasks.js");
 
 describe("addTask", () => {
   test("adds a task to an empty list", () => {
@@ -32,6 +37,28 @@ describe("addTask", () => {
 
   test("throws TypeError for a non-string title", () => {
     assert.throws(() => addTask([], 42), TypeError);
+  });
+});
+
+describe("removeTask", () => {
+  test("removes a task from the list by ID", () => {
+    assert.deepEqual(removeTask([{ id: 4 }, { id: 2 }], 4), [{ id: 2 }]);
+  });
+
+  test("returns a new array upon deletion", () => {
+    const tasks = [{ id: 3 }, { id: 5 }];
+    assert.deepEqual(removeTask(tasks, 5), [{ id: 3 }]);
+    assert.deepEqual(tasks[1], { id: 5 });
+  });
+
+  test("does not mutate the original array", () => {
+    const tasks = [{ id: 1 }, { id: 3 }, { id: 2 }];
+    assert.deepEqual(tasks, [{ id: 1 }, { id: 3 }, { id: 2 }]);
+  });
+
+  test("throws an error if the ID is unknown", () => {
+    const tasks = [{ id: 2 }, { id: 1 }, { id: 3 }];
+    assert.throws(() => removeTask(tasks, 4), RangeError);
   });
 });
 
