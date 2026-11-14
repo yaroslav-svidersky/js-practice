@@ -11,11 +11,7 @@ function removeTask(tasks, id) {
   if (!tasks.some((task) => task.id === id)) {
     throw new RangeError(`Task ${id} not found`);
   }
-  const newList = [];
-  tasks.forEach((task) =>
-    task.id !== id ? newList.push({ ...task }) : undefined,
-  );
-  return newList;
+  return tasks.filter((task) => task.id !== id);
 }
 
 function completeTask(tasks, id) {

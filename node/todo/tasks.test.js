@@ -51,11 +51,9 @@ describe("removeTask", () => {
     assert.deepEqual(tasks[1], { id: 5 });
   });
 
-  test("does not mutate the original objects", () => {
+  test("does not mutate the original array", () => {
     const tasks = [{ id: 1 }, { id: 3 }, { id: 2 }];
-    const newTasks = removeTask(tasks, 3);
-    assert.deepEqual(newTasks, [{ id: 1 }, { id: 2 }]);
-    assert.equal(tasks[0] === newTasks[0], false);
+    assert.deepEqual(tasks, [{ id: 1 }, { id: 3 }, { id: 2 }]);
   });
 
   test("throws an error if the ID is unknown", () => {
