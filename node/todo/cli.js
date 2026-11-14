@@ -1,4 +1,9 @@
-const { addTask, completeTask, formatTasks } = require("./tasks.js");
+const {
+  addTask,
+  removeTask,
+  completeTask,
+  formatTasks,
+} = require("./tasks.js");
 const { loadTasks, saveTasks } = require("./storage.js");
 const path = require("node:path");
 
@@ -16,6 +21,14 @@ async function main() {
       const tasks = addTask(await loadTasks(filePath), title);
       await saveTasks(filePath, tasks);
       console.log(`Added task ${tasks.at(-1).id}`);
+    } else if (command === "remove") {
+      const id = Number(args[0]);
+      if (!Number.isInteger(id)) {
+        throw new TypeError(`Invalid id: ${args[0]}`);
+      }
+      const tasks = removeTask(await loadTasks(filePath), id);
+      await saveTasks(filePath, tasks);
+      console.log(`Removed task ${id}`);
     } else if (command === "done") {
       const id = Number(args[0]);
       if (!Number.isInteger(id)) {
