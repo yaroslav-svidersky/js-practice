@@ -7,6 +7,17 @@ function addTask(tasks, title) {
   return [...tasks, { id: highestID + 1, title: title.trim(), done: false }];
 }
 
+function removeTask(tasks, id) {
+  if (!tasks.some((task) => task.id === id)) {
+    throw new RangeError(`Task ${id} not found`);
+  }
+  const newList = [];
+  tasks.forEach((task) =>
+    task.id !== id ? newList.push({ ...task }) : undefined,
+  );
+  return newList;
+}
+
 function completeTask(tasks, id) {
   const completeTaskIndex = tasks.findIndex((task) => task.id === id);
   if (completeTaskIndex === -1) {
@@ -27,4 +38,4 @@ function formatTasks(tasks) {
   return listTitles;
 }
 
-module.exports = { addTask, completeTask, formatTasks };
+module.exports = { addTask, removeTask, completeTask, formatTasks };
