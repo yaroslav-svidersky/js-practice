@@ -1,8 +1,9 @@
 function toId(value: string | number): number {
-  if (typeof value === "string" && value.trim() === "") {
-    throw new TypeError("An empty line is not permitted.");
+  const isString = typeof value === "string";
+  if (isString && value.trim() === "") {
+    throw new TypeError("An empty string is not allowed");
   }
-  const result = typeof value === "string" ? Number(value) : value;
+  const result: number = isString ? Number(value) : value;
   if (!Number.isInteger(result)) {
     throw new TypeError("Must be an integer");
   }
