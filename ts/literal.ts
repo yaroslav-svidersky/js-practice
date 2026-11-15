@@ -29,3 +29,18 @@ command = "list";
 const input: string = "done";
 command = parseCommand(input);
 console.log(command);
+
+function describeCommand(command: Command): string {
+  switch (command) {
+    case "add":
+      return "Add a new task";
+    case "list":
+      return "Show all tasks";
+    case "done":
+      return "Mark a task as done";
+    case "remove":
+      return "Delete the task by ID";
+  }
+}
+
+console.log(describeCommand("list"));
