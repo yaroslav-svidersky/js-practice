@@ -30,17 +30,15 @@ const input: string = "done";
 command = parseCommand(input);
 console.log(command);
 
+const descriptions: Record<Command, string> = {
+  add: "Add a new task",
+  list: "Show all tasks",
+  done: "Mark a task as done",
+  remove: "Delete the task by ID",
+};
+
 function describeCommand(command: Command): string {
-  switch (command) {
-    case "add":
-      return "Add a new task";
-    case "list":
-      return "Show all tasks";
-    case "done":
-      return "Mark a task as done";
-    case "remove":
-      return "Delete the task by ID";
-  }
+  return descriptions[command];
 }
 
 console.log(describeCommand("list"));
