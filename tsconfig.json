@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleDetection": "force",
+    "strict": true,
+    "noEmit": true
+  },
+  "include": ["ts"]
+}
