@@ -42,3 +42,15 @@ function describeCommand(command: Command): string {
 }
 
 console.log(describeCommand("list"));
+
+console.log(Object.keys(descriptions));
+console.log(Object.values(descriptions).length);
+console.log(Object.entries(descriptions)[0]);
+
+function formatHelp(): string {
+  return Object.entries(descriptions)
+    .map(([command, text]) => `${command} - ${text}`)
+    .join("\n");
+}
+
+console.log(formatHelp());
