@@ -7,28 +7,12 @@ type Task = {
   note?: string;
 };
 
-function parseCommand(input: string): Command {
-  if (
-    input === "add" ||
-    input === "list" ||
-    input === "done" ||
-    input === "remove"
-  ) {
-    return input;
-  }
-  throw new TypeError(`Unknown command: ${input}`);
-}
-
 const task: Task = { id: 1, title: "Buy bread", done: false };
 if (task.note !== undefined) console.log(task.note.length);
 
 let command: Command = "add";
 
 command = "list";
-
-const input: string = "done";
-command = parseCommand(input);
-console.log(command);
 
 const descriptions: Record<Command, string> = {
   add: "Add a new task",
@@ -54,3 +38,18 @@ function formatHelp(): string {
 }
 
 console.log(formatHelp());
+
+function isCommand(input: string): input is Command {
+  return Object.keys(descriptions).includes(input);
+}
+
+function parseCommand(input: string): Command {
+  if (isCommand(input)) {
+    return input;
+  }
+  throw new TypeError(`Unknown command: ${input}`);
+}
+
+const input: string = "done";
+command = parseCommand(input);
+console.log(command);
