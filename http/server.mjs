@@ -10,20 +10,20 @@ const server = createServer((req, res) => {
 
   const url = new URL(req.url, "http://localhost");
   if (req.method === "GET" && url.pathname === "/tasks") {
-    if (url.searchParams.get("done") === null) {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json; charset=utf-8");
-      res.end(JSON.stringify(tasks));
-    } else if (url.searchParams.get("done") === "true") {
-      const doneTasks = tasks.filter((task) => task.done === true);
-      res.end(JSON.stringify(doneTasks));
-    } else if (url.searchParams.get("done") === "false") {
-      const doneTasks = tasks.filter((task) => task.done === false);
-      res.end(JSON.stringify(doneTasks));
-    } else {
+    const done = url.searchParams.get("done");
+    if (done !== "true" && done !== "false" && done !== null) {
       res.statusCode = 400;
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
       res.end("done must be true or false\n");
+      return;
+    } else {
+      const selectedTasks =
+        done === null
+          ? tasks
+          : tasks.filter((task) => String(task.done) === done);
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.end(JSON.stringify(selectedTasks));
     }
     return;
   }
