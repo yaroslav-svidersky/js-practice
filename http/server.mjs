@@ -16,15 +16,14 @@ const server = createServer((req, res) => {
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
       res.end("done must be true or false\n");
       return;
-    } else {
-      const selectedTasks =
-        done === null
-          ? tasks
-          : tasks.filter((task) => String(task.done) === done);
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json; charset=utf-8");
-      res.end(JSON.stringify(selectedTasks));
     }
+    const selectedTasks =
+      done === null
+        ? tasks
+        : tasks.filter((task) => task.done === (done === "true"));
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.end(JSON.stringify(selectedTasks));
     return;
   }
 
