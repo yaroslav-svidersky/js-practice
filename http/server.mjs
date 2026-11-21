@@ -17,7 +17,15 @@ function sendText(res, statusCode, text) {
   res.end(text + "\n");
 }
 
-const server = createServer((req, res) => {
+async function readBody(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+const server = createServer(async (req, res) => {
   console.log(req.method, req.url);
 
   const url = new URL(req.url, "http://localhost");
@@ -47,6 +55,39 @@ const server = createServer((req, res) => {
       return;
     }
     sendJson(res, 200, taskByID);
+    return;
+  }
+  if (req.method === "POST" && url.pathname === "/tasks") {
+    const text = await readBody(req);
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      sendText(res, 400, "body must be valid JSON");
+      return;
+    }
+
+    if (
+      data === null ||
+      Array.isArray(data) ||
+      typeof data === "number" ||
+      typeof data === "string"
+    ) {
+      sendText(res, 400, "body must be a JSON object");
+      return;
+    }
+    const title =
+      data.title !== undefined && typeof data.title === "string"
+        ? data.title.trim()
+        : "";
+    if (title === "") {
+      sendText(res, 400, "title must be a non-empty string");
+      return;
+    }
+    const highestID =
+      tasks.length === 0 ? 0 : Math.max(...tasks.map((elem) => elem.id));
+    tasks.push({ id: highestID + 1, title: title.trim(), done: false });
+    sendJson(res, 201, tasks.at(-1));
     return;
   }
 
