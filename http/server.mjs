@@ -71,18 +71,16 @@ const server = createServer(async (req, res) => {
       sendText(res, 400, "body must be a JSON object");
       return;
     }
-    const title =
-      data.title !== undefined && typeof data.title === "string"
-        ? data.title.trim()
-        : "";
+    const title = typeof data.title === "string" ? data.title.trim() : "";
     if (title === "") {
       sendText(res, 400, "title must be a non-empty string");
       return;
     }
     const highestID =
-      tasks.length === 0 ? 0 : Math.max(...tasks.map((elem) => elem.id));
-    tasks.push({ id: highestID + 1, title: title.trim(), done: false });
-    sendJson(res, 201, tasks.at(-1));
+      tasks.length === 0 ? 0 : Math.max(...tasks.map((task) => task.id));
+    const newTask = { id: highestID + 1, title: title, done: false };
+    tasks.push(newTask);
+    sendJson(res, 201, newTask);
     return;
   }
 
