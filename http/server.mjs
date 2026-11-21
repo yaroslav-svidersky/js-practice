@@ -67,12 +67,7 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (
-      data === null ||
-      Array.isArray(data) ||
-      typeof data === "number" ||
-      typeof data === "string"
-    ) {
+    if (typeof data !== "object" || data === null || Array.isArray(data)) {
       sendText(res, 400, "body must be a JSON object");
       return;
     }
