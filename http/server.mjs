@@ -35,23 +35,18 @@ const server = createServer((req, res) => {
     return;
   }
   const parts = url.pathname.split("/");
-  if (
-    req.method === "GET" &&
-    parts.length === 3 &&
-    parts[1] === "tasks" &&
-    parts[2] !== undefined
-  ) {
+  if (req.method === "GET" && parts.length === 3 && parts[1] === "tasks") {
     const id = Number(parts[2]);
     if (!Number.isInteger(id) || id < 1) {
       sendText(res, 400, "id must be a positive integer");
       return;
     }
     const taskByID = tasks.find((task) => task.id === id);
-    if (taskByID !== undefined) {
-      sendJson(res, 200, taskByID);
+    if (taskByID === undefined) {
+      sendText(res, 404, "Task not found");
       return;
     }
-    sendText(res, 404, "Task not found");
+    sendJson(res, 200, taskByID);
     return;
   }
 
