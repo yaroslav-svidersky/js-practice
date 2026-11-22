@@ -84,6 +84,17 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (url.pathname === "/tasks") {
+    res.setHeader("Allow", "GET, POST");
+    sendText(res, 405, "Method not allowed");
+    return;
+  }
+  if (parts.length === 3 && parts[1] === "tasks") {
+    res.setHeader("Allow", "GET");
+    sendText(res, 405, "Method not allowed");
+    return;
+  }
+
   sendText(res, 404, "Not found");
 });
 
