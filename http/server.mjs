@@ -25,7 +25,7 @@ async function readBody(req) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-const server = createServer(async (req, res) => {
+async function handleRequest(req, res) {
   console.log(req.method, req.url);
 
   const url = new URL(req.url, "http://localhost");
@@ -84,7 +84,30 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (url.pathname === "/tasks") {
+    res.setHeader("Allow", "GET, POST");
+    sendText(res, 405, "Method not allowed");
+    return;
+  }
+  if (parts.length === 3 && parts[1] === "tasks") {
+    res.setHeader("Allow", "GET");
+    sendText(res, 405, "Method not allowed");
+    return;
+  }
+
   sendText(res, 404, "Not found");
+}
+
+const server = createServer(async (req, res) => {
+  try {
+    await handleRequest(req, res);
+  } catch (err) {
+    console.error(err);
+    if (res.headersSent) {
+      return;
+    }
+    sendText(res, 500, "Internal server error");
+  }
 });
 
 server.listen(3000, () => {
