@@ -25,7 +25,7 @@ async function readBody(req) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-const server = createServer(async (req, res) => {
+async function handleRequest(req, res) {
   console.log(req.method, req.url);
 
   const url = new URL(req.url, "http://localhost");
@@ -96,7 +96,9 @@ const server = createServer(async (req, res) => {
   }
 
   sendText(res, 404, "Not found");
-});
+}
+
+const server = createServer(handleRequest);
 
 server.listen(3000, () => {
   console.log("Listening on http://localhost:3000");
