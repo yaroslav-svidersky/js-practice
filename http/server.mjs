@@ -98,7 +98,17 @@ async function handleRequest(req, res) {
   sendText(res, 404, "Not found");
 }
 
-const server = createServer(handleRequest);
+const server = createServer(async (req, res) => {
+  try {
+    await handleRequest(req, res);
+  } catch (err) {
+    console.error(err);
+    if (res.headersSent) {
+      return;
+    }
+    sendText(res, 500, "Internal server error");
+  }
+});
 
 server.listen(3000, () => {
   console.log("Listening on http://localhost:3000");
