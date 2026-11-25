@@ -117,6 +117,7 @@ const server = createServer(async (req, res) => {
       sendText(res, err.statusCode, err.message);
       return;
     }
+    console.error(err);
     sendText(res, 500, "Internal server error");
   }
 });
