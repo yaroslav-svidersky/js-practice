@@ -40,8 +40,7 @@ async function handleRequest(req, res) {
   if (req.method === "GET" && url.pathname === "/tasks") {
     const done = url.searchParams.get("done");
     if (done !== "true" && done !== "false" && done !== null) {
-      sendText(res, 400, "done must be true or false");
-      return;
+      throw new HttpError(400, "done must be true or false");
     }
     const selectedTasks =
       done === null
@@ -54,8 +53,7 @@ async function handleRequest(req, res) {
   if (req.method === "GET" && parts.length === 3 && parts[1] === "tasks") {
     const id = Number(parts[2]);
     if (!Number.isInteger(id) || id < 1) {
-      sendText(res, 400, "id must be a positive integer");
-      return;
+      throw new HttpError(400, "id must be a positive integer");
     }
     const taskByID = tasks.find((task) => task.id === id);
     if (taskByID === undefined) {
@@ -70,18 +68,15 @@ async function handleRequest(req, res) {
     try {
       data = JSON.parse(text);
     } catch {
-      sendText(res, 400, "body must be valid JSON");
-      return;
+      throw new HttpError(400, "body must be valid JSON");
     }
 
     if (typeof data !== "object" || data === null || Array.isArray(data)) {
-      sendText(res, 400, "body must be a JSON object");
-      return;
+      throw new HttpError(400, "body must be a JSON object");
     }
     const title = typeof data.title === "string" ? data.title.trim() : "";
     if (title === "") {
-      sendText(res, 400, "title must be a non-empty string");
-      return;
+      throw new HttpError(400, "title must be a non-empty string");
     }
     const highestID =
       tasks.length === 0 ? 0 : Math.max(...tasks.map((task) => task.id));
@@ -102,7 +97,7 @@ async function handleRequest(req, res) {
     return;
   }
 
-  sendText(res, 404, "Not found");
+  throw new HttpError(404, "Not found");
 }
 
 const server = createServer(async (req, res) => {
