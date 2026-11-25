@@ -25,6 +25,14 @@ function sendText(res, statusCode, text) {
   res.end(text + "\n");
 }
 
+function parseTaskId(text) {
+  const id = Number(text);
+  if (!Number.isInteger(id) || id < 1) {
+    throw new HttpError(400, "id must be a positive integer");
+  }
+  return id;
+}
+
 async function readBody(req) {
   const chunks = [];
   for await (const chunk of req) {
@@ -51,10 +59,7 @@ async function handleRequest(req, res) {
   }
   const parts = url.pathname.split("/");
   if (req.method === "GET" && parts.length === 3 && parts[1] === "tasks") {
-    const id = Number(parts[2]);
-    if (!Number.isInteger(id) || id < 1) {
-      throw new HttpError(400, "id must be a positive integer");
-    }
+    const id = parseTaskId(parts[2]);
     const taskByID = tasks.find((task) => task.id === id);
     if (taskByID === undefined) {
       throw new HttpError(404, "Task not found");
