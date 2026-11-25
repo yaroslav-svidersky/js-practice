@@ -1,5 +1,13 @@
 import { createServer } from "node:http";
 
+class HttpError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.name = "HttpError";
+    this.statusCode = statusCode;
+  }
+}
+
 const tasks = [
   { id: 1, title: "Buy bread", done: false },
   { id: 2, title: "Learn HTTP", done: true },
@@ -51,8 +59,7 @@ async function handleRequest(req, res) {
     }
     const taskByID = tasks.find((task) => task.id === id);
     if (taskByID === undefined) {
-      sendText(res, 404, "Task not found");
-      return;
+      throw new HttpError(404, "Task not found");
     }
     sendJson(res, 200, taskByID);
     return;
@@ -102,8 +109,12 @@ const server = createServer(async (req, res) => {
   try {
     await handleRequest(req, res);
   } catch (err) {
-    console.error(err);
     if (res.headersSent) {
+      console.error(err);
+      return;
+    }
+    if (err instanceof HttpError) {
+      sendText(res, err.statusCode, err.message);
       return;
     }
     sendText(res, 500, "Internal server error");
