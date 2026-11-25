@@ -1,5 +1,13 @@
 import { createServer } from "node:http";
 
+class HttpError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.name = "HttpError";
+    this.statusCode = statusCode;
+  }
+}
+
 const tasks = [
   { id: 1, title: "Buy bread", done: false },
   { id: 2, title: "Learn HTTP", done: true },
@@ -17,6 +25,14 @@ function sendText(res, statusCode, text) {
   res.end(text + "\n");
 }
 
+function parseTaskId(text) {
+  const id = Number(text);
+  if (!Number.isInteger(id) || id < 1) {
+    throw new HttpError(400, "id must be a positive integer");
+  }
+  return id;
+}
+
 async function readBody(req) {
   const chunks = [];
   for await (const chunk of req) {
@@ -32,8 +48,7 @@ async function handleRequest(req, res) {
   if (req.method === "GET" && url.pathname === "/tasks") {
     const done = url.searchParams.get("done");
     if (done !== "true" && done !== "false" && done !== null) {
-      sendText(res, 400, "done must be true or false");
-      return;
+      throw new HttpError(400, "done must be true or false");
     }
     const selectedTasks =
       done === null
@@ -44,15 +59,10 @@ async function handleRequest(req, res) {
   }
   const parts = url.pathname.split("/");
   if (req.method === "GET" && parts.length === 3 && parts[1] === "tasks") {
-    const id = Number(parts[2]);
-    if (!Number.isInteger(id) || id < 1) {
-      sendText(res, 400, "id must be a positive integer");
-      return;
-    }
+    const id = parseTaskId(parts[2]);
     const taskByID = tasks.find((task) => task.id === id);
     if (taskByID === undefined) {
-      sendText(res, 404, "Task not found");
-      return;
+      throw new HttpError(404, "Task not found");
     }
     sendJson(res, 200, taskByID);
     return;
@@ -63,18 +73,15 @@ async function handleRequest(req, res) {
     try {
       data = JSON.parse(text);
     } catch {
-      sendText(res, 400, "body must be valid JSON");
-      return;
+      throw new HttpError(400, "body must be valid JSON");
     }
 
     if (typeof data !== "object" || data === null || Array.isArray(data)) {
-      sendText(res, 400, "body must be a JSON object");
-      return;
+      throw new HttpError(400, "body must be a JSON object");
     }
     const title = typeof data.title === "string" ? data.title.trim() : "";
     if (title === "") {
-      sendText(res, 400, "title must be a non-empty string");
-      return;
+      throw new HttpError(400, "title must be a non-empty string");
     }
     const highestID =
       tasks.length === 0 ? 0 : Math.max(...tasks.map((task) => task.id));
@@ -95,17 +102,22 @@ async function handleRequest(req, res) {
     return;
   }
 
-  sendText(res, 404, "Not found");
+  throw new HttpError(404, "Not found");
 }
 
 const server = createServer(async (req, res) => {
   try {
     await handleRequest(req, res);
   } catch (err) {
-    console.error(err);
     if (res.headersSent) {
+      console.error(err);
       return;
     }
+    if (err instanceof HttpError) {
+      sendText(res, err.statusCode, err.message);
+      return;
+    }
+    console.error(err);
     sendText(res, 500, "Internal server error");
   }
 });
