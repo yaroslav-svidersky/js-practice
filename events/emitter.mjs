@@ -4,14 +4,14 @@ export class Emitter {
   }
 
   on(name, fn) {
-    this.events.push([name, fn]);
+    this.events.push({ name, fn });
   }
 
   emit(name, ...args) {
     let thereWereListeners = false;
     for (const listener of this.events) {
-      if (listener[0] === name) {
-        listener[1](...args);
+      if (listener.name === name) {
+        listener.fn(...args);
         thereWereListeners = true;
       }
     }

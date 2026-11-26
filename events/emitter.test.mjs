@@ -3,15 +3,6 @@ import assert from "node:assert/strict";
 import { Emitter } from "./emitter.mjs";
 
 describe("Emitter", () => {
-  test("emit subscribes a listener to an event", () => {
-    const emitter = new Emitter();
-    const calls = [];
-    const fn = (name) => calls.push(name);
-    emitter.on("greet", fn);
-
-    assert.deepEqual(emitter.events, [["greet", fn]]);
-  });
-
   test("emit calls a listener with the arguments", () => {
     const emitter = new Emitter();
     const calls = [];
@@ -50,5 +41,28 @@ describe("Emitter", () => {
     const whatEmitReturned = emitter.emit("greet", "Marcus");
 
     assert.equal(whatEmitReturned, false);
+  });
+
+  test("emit does not call listeners of other events", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    emitter.on("greet", (name) => calls.push(name));
+    emitter.on("bye", (name) => calls.push("bye " + name));
+
+    emitter.emit("bye", "Marcus");
+
+    assert.deepEqual(calls, ["bye Marcus"]);
+  });
+
+  test("emit passes all arguments to the listeners", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    emitter.on("greet", (name, greeting, exclamation) =>
+      calls.push(`${greeting}, ${name}${exclamation}`),
+    );
+
+    emitter.emit("greet", "Marcus", "Hello", "!");
+
+    assert.deepEqual(calls, ["Hello, Marcus!"]);
   });
 });
