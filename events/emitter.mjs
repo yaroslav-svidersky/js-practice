@@ -28,17 +28,11 @@ export class Emitter {
   }
 
   once(name, fn) {
-    const events = this.events;
-    const listeners = events.get(name);
     const wrapperFn = (...args) => {
       this.off(name, wrapperFn);
       fn(...args);
     };
-    if (listeners === undefined) {
-      events.set(name, [wrapperFn]);
-      return;
-    }
-    listeners.push(wrapperFn);
+    this.on(name, wrapperFn);
   }
 
   emit(name, ...args) {

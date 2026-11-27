@@ -130,7 +130,7 @@ describe("Emitter", () => {
     assert.deepEqual(calls, ["Marcus1"]);
   });
 
-  test("of the two emit listeners, only the first one is triggered", () => {
+  test("once listener is called only on the first emit", () => {
     const emitter = new Emitter();
     const calls = [];
     const fn = (name) => calls.push(name);
