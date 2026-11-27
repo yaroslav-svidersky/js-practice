@@ -129,4 +129,41 @@ describe("Emitter", () => {
 
     assert.deepEqual(calls, ["Marcus1"]);
   });
+
+  test("of the two emit listeners, only the first one is triggered", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+
+    emitter.once("greet", fn);
+    emitter.emit("greet", "Marcus");
+    emitter.emit("greet", "Marcus");
+
+    assert.deepEqual(calls, ["Marcus"]);
+  });
+
+  test("if a once-listener is subscribed first, the next listener in the same emit is also called", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+    const fn1 = (name) => calls.push(name + "1");
+
+    emitter.once("greet", fn);
+    emitter.on("greet", fn1);
+    emitter.emit("greet", "Marcus");
+
+    assert.deepEqual(calls, ["Marcus", "Marcus1"]);
+  });
+
+  test("if the once listener was the only one, after it was triggered, the next emit returns false", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+
+    emitter.once("greet", fn);
+    emitter.emit("greet", "Marcus");
+    const whatEmitReturned = emitter.emit("greet", "Marcus");
+
+    assert.equal(whatEmitReturned, false);
+  });
 });
