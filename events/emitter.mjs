@@ -19,9 +19,12 @@ export class Emitter {
     if (listeners === undefined) {
       return;
     }
-    const filteredListeners = listeners.filter((mapFn) => mapFn !== fn);
+    const filteredListeners = listeners.filter((listener) => listener !== fn);
+    if (filteredListeners.length === 0) {
+      events.delete(name);
+      return;
+    }
     events.set(name, filteredListeners);
-    if (filteredListeners.length === 0) events.delete(name);
   }
 
   emit(name, ...args) {
