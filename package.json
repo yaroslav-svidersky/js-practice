@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint .",
-    "test": "node --test \"**/*.test.js\"",
+    "test": "node --test \"**/*.test.js\" \"**/*.test.mjs\"",
     "typecheck": "tsc"
   },
   "repository": {
