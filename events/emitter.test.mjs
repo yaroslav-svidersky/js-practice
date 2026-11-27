@@ -166,4 +166,16 @@ describe("Emitter", () => {
 
     assert.equal(whatEmitReturned, false);
   });
+
+  test("off can remove a once-subscription from the original function", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+
+    emitter.once("greet", fn);
+    emitter.off("greet", fn);
+    emitter.emit("greet", "Marcus");
+
+    assert.deepEqual(calls, []);
+  });
 });

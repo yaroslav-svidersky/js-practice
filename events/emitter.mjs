@@ -19,7 +19,9 @@ export class Emitter {
     if (listeners === undefined) {
       return;
     }
-    const filteredListeners = listeners.filter((listener) => listener !== fn);
+    const filteredListeners = listeners.filter(
+      (listener) => listener !== fn && listener.listener !== fn,
+    );
     if (filteredListeners.length === 0) {
       events.delete(name);
       return;
@@ -32,6 +34,7 @@ export class Emitter {
       this.off(name, wrapperFn);
       fn(...args);
     };
+    wrapperFn.listener = fn;
     this.on(name, wrapperFn);
   }
 
