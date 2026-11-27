@@ -65,4 +65,16 @@ describe("Emitter", () => {
 
     assert.deepEqual(calls, ["Hello, Marcus!"]);
   });
+
+  test("emit names from 'Object.prototype' work just like regular ones", () => {
+    const emitter = new Emitter();
+    const calls = [];
+
+    const whatEmitReturned = emitter.emit("toString", "Marcus");
+    emitter.on("toString", (name) => calls.push(name));
+    emitter.emit("toString", "Marcus");
+
+    assert.equal(whatEmitReturned, false);
+    assert.deepEqual(calls, ["Marcus"]);
+  });
 });
