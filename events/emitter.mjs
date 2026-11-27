@@ -4,12 +4,12 @@ export class Emitter {
   }
 
   on(name, fn) {
-    const listeners = this.events;
-    if (listeners.get(name) === undefined) {
-      listeners.set(name, [fn]);
+    const listeners = this.events.get(name);
+    if (listeners === undefined) {
+      this.events.set(name, [fn]);
       return;
     }
-    listeners.get(name).push(fn);
+    listeners.push(fn);
   }
 
   emit(name, ...args) {
