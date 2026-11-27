@@ -77,4 +77,42 @@ describe("Emitter", () => {
     assert.equal(whatEmitReturned, false);
     assert.deepEqual(calls, ["Marcus"]);
   });
+
+  test("after off, the listener is not called", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+
+    emitter.on("greet", fn);
+    emitter.off("greet", fn);
+    emitter.emit("greet", "Marcus");
+
+    assert.deepEqual(calls, []);
+  });
+
+  test("after the only listener is off, emit returns false", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+
+    emitter.on("greet", fn);
+    emitter.off("greet", fn);
+
+    const whatEmitReturned = emitter.emit("greet", "Marcus");
+
+    assert.equal(whatEmitReturned, false);
+  });
+
+  test("off of a function that is not subscribed does not change anything", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+    const other = (name) => calls.push(name + "1");
+
+    emitter.on("greet", fn);
+    emitter.off("greet", other);
+    emitter.emit("greet", "Marcus");
+
+    assert.deepEqual(calls, ["Marcus"]);
+  });
 });
