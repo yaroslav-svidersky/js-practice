@@ -115,4 +115,18 @@ describe("Emitter", () => {
 
     assert.deepEqual(calls, ["Marcus"]);
   });
+
+  test("two listeners are subscribed, off removes only the first one", () => {
+    const emitter = new Emitter();
+    const calls = [];
+    const fn = (name) => calls.push(name);
+    const fn1 = (name) => calls.push(name + "1");
+
+    emitter.on("greet", fn);
+    emitter.on("greet", fn1);
+    emitter.off("greet", fn);
+    emitter.emit("greet", "Marcus");
+
+    assert.deepEqual(calls, ["Marcus1"]);
+  });
 });
