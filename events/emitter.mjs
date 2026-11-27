@@ -1,20 +1,25 @@
 export class Emitter {
   constructor() {
-    this.events = [];
+    this.events = new Map();
   }
 
   on(name, fn) {
-    this.events.push({ name, fn });
+    const listeners = this.events;
+    if (listeners.get(name) === undefined) {
+      listeners.set(name, [fn]);
+      return;
+    }
+    listeners.get(name).push(fn);
   }
 
   emit(name, ...args) {
-    let thereWereListeners = false;
-    for (const listener of this.events) {
-      if (listener.name === name) {
-        listener.fn(...args);
-        thereWereListeners = true;
-      }
+    const listeners = this.events.get(name);
+    if (listeners === undefined) {
+      return false;
     }
-    return thereWereListeners;
+    for (const fn of listeners) {
+      fn(...args);
+    }
+    return true;
   }
 }
